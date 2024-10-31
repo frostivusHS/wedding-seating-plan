@@ -46,6 +46,7 @@ const seatingData = [
     { name: "Izrin", table: "3" },
     { name: "Faridah Hanim", table: "3" },
     { name: "Rosmimi", table: "3" },
+    { name: "Khayr", table: "3" },
 
     // Table 5 (Tan Family 1)
     { name: "Richard Tan", table: "5" },
@@ -111,7 +112,7 @@ const seatingData = [
     { name: "Yew Bu Hua", table: "10" },
     { name: "Elaine Yew", table: "10" },
     { name: "Dr Margaret Leow", table: "10" },
-    { name: "Dr Yew Mee Ong", table: "10" },
+
     { name: "Datin Lee Sieng Shuen", table: "10" },
     { name: "Dato Lee Chee Leong", table: "10" },
 
@@ -295,11 +296,22 @@ function showGuestInfo(guest) {
     const guestsAtTable = seatingData.filter(g => g.table === tableNumber);
     const guestsNames = guestsAtTable.map(g => g.name).join('<br>');
 
+    resultDiv.innerHTML = `Hello ${guest.name},<br>
+    <span style="font-size: 2em; display: block; margin-top: 10px;">You are seated at Table ${tableNumber}.</span><br>
+    <b>All guests at this table:</b><br>${guestsNames}.`;
+
+guestOptionsDiv.style.display = "none"; // Hide the options after selection
+
     // Position the arrow based on the table number
     positionArrow(tableNumber);
 
-    resultDiv.innerHTML = `Hello ${guest.name}, you are seated at Table ${tableNumber}.<br><br><b>All guests at this table:</b><br>${guestsNames}.`;
-    guestOptionsDiv.style.display = "none"; // Hide the options after selection
+    // Register the guest when their name is clicked
+    google.script.run.withSuccessHandler(() => {
+        alert(`${guest.name} has been registered.`);
+    }).registerGuest(guest.name); // Call the registerGuest function in Google Apps Script
+
+    // Updated innerHTML to add styling and line break for table number
+   
 }
 
 function positionArrow(tableNumber) {
@@ -307,7 +319,7 @@ function positionArrow(tableNumber) {
     
     // Define positions for each table (you will need to adjust these values)
     const positions = {
-        'VIP': { left: '672px', top: '155px' },
+        'VIP': { left: '50%', top: '50%' },
         '1': { left: '482px', top: '170px' },
         '2': { left: '482px', top: '220px' },
         '3': { left: '482px', top: '280px' },
@@ -315,10 +327,9 @@ function positionArrow(tableNumber) {
         '6': { left: '542px', top: '245px' },
         '7': { left: '542px', top: '315px' },
         '8': { left: '592px', top: '200px' },
-        '9': { left: '592px', top: '245px' }, // Example position for VIP
+        '9': { left: '592px', top: '245px' },
+        '10': { left: '592px', top: '245px' }, // Example position for VIP
         // Add other tables here
-        // 'Table1': { left: '302', top: '215' },
-        // 'Table2': { left: 'x', top: 'y' },
     };
 
     if (positions[tableNumber]) {
@@ -328,5 +339,8 @@ function positionArrow(tableNumber) {
     } else {
         arrow.style.display = "none"; // Hide if the table number isn't defined
     }
+
+
+    
 }
 
