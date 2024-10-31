@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Seating Plan</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        #seating-result { margin-top: 20px; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+    <h1>Wedding Seating Plan</h1>
+    <input type="text" id="guest-name" placeholder="Enter your name">
+    <button onclick="findSeat()">Find My Seat</button>
+    <div id="seating-result"></div>
+    <script src="seating.js"></script>
+    <div id="guest-options" style="display: none;"></div> <!-- Options for multiple matches -->
+    
+    <!-- Seating Plan Image -->
+    <div style="position: relative;">
+        <img id="seating-plan" src="https://imgur.com/wbgbKgJ.jpg" alt="" style="max-width: 100%; height: auto;">
+        <div id="arrow" style="position: absolute; display: none;">
+            <img src="path/to/arrow.png" alt="Arrow" style="width: 50px; height: 50px;">
+        </div>
+    </div>
+    
+</body>
+</html>
