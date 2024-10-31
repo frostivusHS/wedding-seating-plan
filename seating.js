@@ -26,7 +26,7 @@ const seatingData = [
     
     // Table 2 (BBGS 1)
     { name: "Soh Fern", table: "2" },
-    { name: "Kit Wan", table: "2" },
+    { name: "Lim Kit Wan", table: "2" },
     { name: "Wei Lee", table: "2" },
     { name: "Kum Yee", table: "2" },
     { name: "Mei Koon", table: "2" },
@@ -195,7 +195,7 @@ const seatingData = [
     { name: "See See", table: "18" },
     { name: "Andy", table: "18" },
     { name: "Leanne", table: "18" },
-    { name: "Baby Logan", table: "18" },
+    { name: "Baby Logan Lim", table: "18" },
     { name: "Anne See", table: "18" },
     { name: "Uncle See", table: "18" },
 
@@ -240,7 +240,7 @@ const seatingData = [
     { name: "Dr Liow Kong You", table: "22" },
     
     // Table 23 (CDPC 3)
-    { name: "Eliza Yee", table: "23" },
+    { name: "Elisa Yee", table: "23" },
     { name: "Justin Yee", table: "23" },
     { name: "Eliza Ch’ng", table: "23" },
     { name: "Ch’ng Wee Lee", table: "23" },
@@ -283,7 +283,7 @@ function findSeat() {
             guestOptionsDiv.style.display = "block"; // Show the options
         }
     } else {
-        resultDiv.innerHTML = "Sorry, we couldn't find your name. Please check the spelling or ask for assistance.";
+        resultDiv.innerHTML = "Sorry, we couldn't find your name. Please ask for assistance from the cabin crew.";
     }
 }
 
@@ -298,7 +298,7 @@ function showGuestInfo(guest) {
     // Position the arrow based on the table number
     positionArrow(tableNumber);
 
-    resultDiv.innerHTML = `Hello ${guest.name}, you are seated at Table ${tableNumber}.<br><br>Guests at this table:<br>${guestsNames}.`;
+    resultDiv.innerHTML = `Hello ${guest.name}, you are seated at Table ${tableNumber}.<br><br><b>All guests at this table:</b><br>${guestsNames}.`;
     guestOptionsDiv.style.display = "none"; // Hide the options after selection
 }
 
@@ -307,9 +307,17 @@ function positionArrow(tableNumber) {
     
     // Define positions for each table (you will need to adjust these values)
     const positions = {
-        'VIP': { left: '100px', top: '200px' }, // Example position for VIP
+        'VIP': { left: '672px', top: '155px' },
+        '1': { left: '482px', top: '170px' },
+        '2': { left: '482px', top: '220px' },
+        '3': { left: '482px', top: '280px' },
+        '5': { left: '542px', top: '180px' },
+        '6': { left: '542px', top: '245px' },
+        '7': { left: '542px', top: '315px' },
+        '8': { left: '592px', top: '200px' },
+        '9': { left: '592px', top: '245px' }, // Example position for VIP
         // Add other tables here
-        // 'Table1': { left: 'x', top: 'y' },
+        // 'Table1': { left: '302', top: '215' },
         // 'Table2': { left: 'x', top: 'y' },
     };
 
