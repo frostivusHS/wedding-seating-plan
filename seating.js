@@ -257,7 +257,7 @@ function findSeat() {
     const guestName = document.getElementById("guest-name").value.trim().toLowerCase();
     const resultDiv = document.getElementById("seating-result");
     const arrow = document.getElementById("arrow");
-    const guestOptionsDiv = document.getElementById("guest-options"); // Add this to show options
+    const guestOptionsDiv = document.getElementById("guest-options"); // Show options div
     guestOptionsDiv.innerHTML = ""; // Clear previous options
     guestOptionsDiv.style.display = "none"; // Hide options initially
 
@@ -268,11 +268,9 @@ function findSeat() {
     arrow.style.display = "none";
 
     if (matchingGuests.length > 0) {
-        // If there’s only one match, show the result immediately
         if (matchingGuests.length === 1) {
             showGuestInfo(matchingGuests[0]);
         } else {
-            // If multiple matches, show options to choose from
             resultDiv.innerHTML = "Multiple matches found. Please select your name:";
             matchingGuests.forEach(guest => {
                 const option = document.createElement("div");
@@ -281,43 +279,78 @@ function findSeat() {
                 option.onclick = () => showGuestInfo(guest); // Set click event
                 guestOptionsDiv.appendChild(option);
             });
-            guestOptionsDiv.style.display = "block"; // Show the options
+            guestOptionsDiv.style.display = "block"; // Show options
         }
     } else {
-        resultDiv.innerHTML = "Sorry, we couldn't find your name. Please ask for assistance from the cabin crew.";
+        resultDiv.innerHTML = "Sorry, we couldn't find your name. Please ask for assistance.";
     }
 }
 
 function showGuestInfo(guest) {
     const resultDiv = document.getElementById("seating-result");
-    const arrow = document.getElementById("arrow");
-    const guestOptionsDiv = document.getElementById("guest-options"); // Get the guest options div
+    const guestOptionsDiv = document.getElementById("guest-options");
     const tableNumber = guest.table;
     const guestsAtTable = seatingData.filter(g => g.table === tableNumber);
-    const guestsNames = guestsAtTable.map(g => g.name).join('<br>');
 
+    // Display table information and options to check in others
     resultDiv.innerHTML = `Hello ${guest.name},<br>
-    <span style="font-size: 2em; display: block; margin-top: 10px;">You are seated at Table ${tableNumber}.</span><br>
-    <b>All guests at this table:</b><br>${guestsNames}.`;
+        <span style="font-size: 2em; display: block; margin-top: 10px;">You are seated at Table ${tableNumber}.</span><br>
+        Travelling as a group? Check in the others at this table!<br><br>`;
 
-guestOptionsDiv.style.display = "none"; // Hide the options after selection
+    guestOptionsDiv.innerHTML = ""; // Clear previous content
+
+    guestsAtTable.forEach(g => {
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = g.name;
+        checkbox.checked = g.name === guest.name; // Auto-select the guest's name
+
+        const label = document.createElement("label");
+        label.textContent = g.name;
+        label.style.display = "block";
+
+        label.prepend(checkbox);
+        guestOptionsDiv.appendChild(label);
+    });
+
+    // Add Confirm and Cancel buttons
+    const confirmButton = document.createElement("button");
+    confirmButton.textContent = "Confirm";
+    confirmButton.onclick = () => confirmRegistration(guestsAtTable);
+
+    const cancelButton = document.createElement("button");
+    cancelButton.textContent = "Cancel";
+    cancelButton.onclick = () => guestOptionsDiv.style.display = "none";
+
+    guestOptionsDiv.appendChild(confirmButton);
+    guestOptionsDiv.appendChild(cancelButton);
+
+    guestOptionsDiv.style.display = "block"; // Show the options
 
     // Position the arrow based on the table number
     positionArrow(tableNumber);
-
-    // Register the guest when their name is clicked
-    google.script.run.withSuccessHandler(() => {
-        alert(`${guest.name} has been registered.`);
-    }).registerGuest(guest.name); // Call the registerGuest function in Google Apps Script
-
-    // Updated innerHTML to add styling and line break for table number
-   
 }
+
+function confirmRegistration() {
+    const checkboxes = document.querySelectorAll('#guest-options input[type="checkbox"]:checked');
+
+    checkboxes.forEach(checkbox => {
+        const guestName = checkbox.value;
+
+        // Register each selected guest in Google Sheets
+        google.script.run.withSuccessHandler(() => {
+            alert(`${guestName} has been registered.`);
+        }).registerGuest(guestName); // Call the Google Apps Script function here
+    });
+
+    document.getElementById("guest-options").style.display = "none"; // Hide the options after registration
+}
+
 
 function positionArrow(tableNumber) {
     const arrow = document.getElementById("arrow");
-    
-    // Define positions for each table (you will need to adjust these values)
+
+    // Define positions for each table (adjust these values)
     const positions = {
         'VIP': { left: '50%', top: '50%' },
         '1': { left: '482px', top: '170px' },
@@ -328,8 +361,7 @@ function positionArrow(tableNumber) {
         '7': { left: '542px', top: '315px' },
         '8': { left: '592px', top: '200px' },
         '9': { left: '592px', top: '245px' },
-        '10': { left: '592px', top: '245px' }, // Example position for VIP
-        // Add other tables here
+        '10': { left: '592px', top: '245px' }
     };
 
     if (positions[tableNumber]) {
@@ -337,10 +369,7 @@ function positionArrow(tableNumber) {
         arrow.style.top = positions[tableNumber].top;
         arrow.style.display = "block"; // Show the arrow
     } else {
-        arrow.style.display = "none"; // Hide if the table number isn't defined
+        arrow.style.display = "none"; // Hide if no table position defined
     }
-
-
-    
 }
 
